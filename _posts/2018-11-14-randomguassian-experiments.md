@@ -1,15 +1,15 @@
 ---
-title: "randomGaussian() experiments"
+title: 'randomGaussian() experiments'
 date: 2018-11-14T19:00:00-08:00
 categories:
-    - Blog
+  - Blog
 tags:
-    - p5.js
-    - processing
-    - tutorial
+  - p5.js
+  - processing
+  - tutorial
 header:
-    teaser: /assets/images/posts/randomguassian-fig2.png
-    og_image: /assets/images/posts/randomguassian-fig2.png
+  teaser: /assets/images/posts/randomguassian-fig2.png
+  og_image: /assets/images/posts/randomguassian-fig2.png
 classes: wide
 ---
 
@@ -27,7 +27,7 @@ I wrote my sketch in JavaScript using P5.js, but it can easily be converted into
 
 {% include video id="8uyR-YU_0dg" provider="youtube" %}
 
-* * *
+---
 
 Here is my thought process and approach. For the sake of easier calculations I’m going to use 1000x1000px canvas.
 
@@ -37,18 +37,18 @@ Here is my thought process and approach. For the sake of easier calculations I�
 
 From the drawing above we can see that we our randomly placed points need to be placed between **300px** and **700px** on **X** axis and **200px** and **800px** on **Y** axis. We can translate that into code that looks something like this:
 
-~~~javascript
+```javascript
 function setup() {
-  createCanvas(1000, 1000);
-  background(10);
+  createCanvas(1000, 1000)
+  background(10)
 }
 function draw() {
-  stroke(245);
-  var xloc = random(300, 700);
-  var yloc = random(200, 800);
-  point(xloc, yloc);
+  stroke(245)
+  var xloc = random(300, 700)
+  var yloc = random(200, 800)
+  point(xloc, yloc)
 }
-~~~
+```
 
 and after running this for some time we should see something similar to the image below:
 
@@ -72,19 +72,19 @@ Now we just need to figure out what that **100px** in relation to the height of 
 
 Based on all of those things we can come up with a code to fill out our trapezoid with random points and not have any of them go out of trapezoids boundary. Keep in mind that we had to move up `yloc` assignment, because we need to have it declared and randomly picked in order to calculate `xloc`.
 
-~~~javascript
+```javascript
 function setup() {
-  createCanvas(1000, 1000);
-  background(10);
+  createCanvas(1000, 1000)
+  background(10)
 }
 function draw() {
-  stroke(245);
-  var yloc = random(200, 800);
-  var shift = (yloc - 200) * 0.166;
-  var xloc = random(300 - shift, 700 + shift);
-  point(xloc, yloc);
+  stroke(245)
+  var yloc = random(200, 800)
+  var shift = (yloc - 200) * 0.166
+  var xloc = random(300 - shift, 700 + shift)
+  point(xloc, yloc)
 }
-~~~
+```
 
 Executing this code will give us something like this:
 
@@ -98,34 +98,34 @@ We need to switch `yloc` calculation from using `random()` to use `randomGaussia
 
 Let’s see how we can do that. For standard deviation we can pick an arbitrary number and see how well it works. Let’s pick **180**. Knowing that Gaussian distribution produces both positive and negative numbers we will change all of them to be positive by using `abs()` function and then we will add `mean` of **200** to shift everything down by **200px** (remember that’s where our top side of the trapezoid is). And then we constrain coordinates to fall between **200px** and **800px** to prevent an occasional point that drops below the trapezoid boundary. In code it will look like this:
 
-~~~javascript
-var sd = 180;
-var mean = 200;
-var yloc = randomGaussian();
-yloc = abs(yloc * sd) + mean;
-yloc = constrain(yloc, 200, 800);
-~~~
+```javascript
+var sd = 180
+var mean = 200
+var yloc = randomGaussian()
+yloc = abs(yloc * sd) + mean
+yloc = constrain(yloc, 200, 800)
+```
 
 I think we got all pieces of the puzzle and we are ready to put it together. With that our entire sketch would look like this:
 
-~~~javascript
-var sd = 180;
-var mean = 200;
+```javascript
+var sd = 180
+var mean = 200
 function setup() {
-  createCanvas(1000, 1000);
-  background(10);
+  createCanvas(1000, 1000)
+  background(10)
 }
 function draw() {
-  stroke(245);
-  var yloc = randomGaussian();
-  yloc = abs(yloc * sd) + mean;
-  yloc = constrain(yloc, 200, 800);
-  var shift = (yloc - 200) * 0.166;
-  var xloc = random(300 - shift, 700 + shift);
+  stroke(245)
+  var yloc = randomGaussian()
+  yloc = abs(yloc * sd) + mean
+  yloc = constrain(yloc, 200, 800)
+  var shift = (yloc - 200) * 0.166
+  var xloc = random(300 - shift, 700 + shift)
 
-  point(xloc, yloc);
+  point(xloc, yloc)
 }
-~~~
+```
 
 Voila! Here is our final result after running this sketch for some time:
 
@@ -135,7 +135,7 @@ Voila! Here is our final result after running this sketch for some time:
 
 <div id="sketch-holder"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.10/p5.min.js"></script>
 <script>
 var sd = 180;
 var mean = 200;
